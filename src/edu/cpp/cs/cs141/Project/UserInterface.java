@@ -169,32 +169,71 @@ public class UserInterface {
 	 */
 	public void gameLoop(){
             
+            while (eng.getAgent().isAlive()) {
 		displayBoard();
+                displayNextTwo(lookDirection());
 		getDirection();
+            }
 	}
 	
 	/**
-	 * @return
+	 * Direction to move in
 	 */
 	public DIRECTION getDirection(){
 		String choice="";
+                boolean choiceMade = false;
 		DIRECTION dir = null;
-		while (choice != "w" || choice != "a" || choice != "s" || choice != "d"){
-    		System.out.print("Choose direction (W-Up, A-Left, S-Down, D-Right): \t");
+		while (choiceMade == false) {
+    		System.out.print("Choose direction to move (W-Up, A-Left, S-Down, D-Right): \t");
     		choice = keyboard.nextLine();
-    		if (choice.equalsIgnoreCase("w"))
+    		if (choice.equalsIgnoreCase("w") && eng.getAgentY() < 9) {
     			dir = DIRECTION.UP;
-    		else if (choice.equalsIgnoreCase("a"))
+                        choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("a") && eng.getAgentX() > 0) {
     			dir = DIRECTION.LEFT;
-    		else if (choice.equalsIgnoreCase("s"))
+                        choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("s") && eng.getAgentY() > 0) {
     			dir = DIRECTION.DOWN;
-    		else if (choice.equalsIgnoreCase("d"))
+                        choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("d") && eng.getAgentX() < 9) {
     			dir = DIRECTION.RIGHT;
+                        choiceMade = true;
+                }
     		else System.out.println("Not a valid move. Try again.");
 		}
 		return dir;
 	}
-
+        
+	public DIRECTION lookDirection(){
+		String choice="";
+                boolean choiceMade = false;
+		DIRECTION dir = null;
+		while (choiceMade == false) {
+    		System.out.print("Choose direction to move (W-Up, A-Left, S-Down, D-Right): \t");
+    		choice = keyboard.nextLine();
+    		if (choice.equalsIgnoreCase("w") && eng.getAgentY() < 8) {
+    			dir = DIRECTION.UP;
+                        choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("a") && eng.getAgentX() > 1) {
+    			dir = DIRECTION.LEFT;
+                        choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("s") && eng.getAgentY() > 1) {
+    			dir = DIRECTION.DOWN;
+                        choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("d") && eng.getAgentX() < 8) {
+    			dir = DIRECTION.RIGHT;
+                        choiceMade = true;
+                }
+    		else System.out.println("Not a valid move. Try again.");
+		}
+		return dir;
+	}
 
 	/**
 	 * A method that will allow the user to quit their current game and save their progress to a specified file location.

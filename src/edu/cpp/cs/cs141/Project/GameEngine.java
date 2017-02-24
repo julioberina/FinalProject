@@ -37,8 +37,8 @@ public class GameEngine {
 	 * locations every time it is created, and the player starts with 3 lives.
 	 */
 	public GameEngine() {
-		bldg = new Board();
-		spy = new Agent();
+            spy = new Agent();
+            bldg = new Board();
 	}
 
 	/**

@@ -19,48 +19,29 @@ import java.util.Random;
  * @author AlternativeFAQs
  *
  */
-public class Assassin {
-	private int yPos;
-	private int xPos;
-	
-	/**
-	 * 
-	 */
-	private boolean alive;
-	
-	/**
-	 * 
-	 */
-	public Assassin(int x, int y){
-		xPos = x;
-		yPos = y;
-		alive = true;
-	}
-	
+public class Assassin extends ActiveAgent {
 
-	/**
-	 * 
-	 */
-	public void kill(){
-		alive = false;
-	}
+    Random random;
+    
+    public Assassin(int x, int y){
+	super(x, y, 1);
+        random = new Random();
+    }
 	
 	/**
 	 * Random number generator selects 0 through 3 to move.
 	 * 0 for up, 1 for right, 2 for down, 3 for left.
 	 */
         
-        public int randomGen(int boundary) {
-            Random rand = new Random();
-            return rand.nextInt(boundary);
-        }
-        
 	public void move() {
-		int direction = randomGen(4);
-		if (direction == 0) {
-			if (yPos < 8 || (xPos == 1 && (yPos + 1 != 1 || yPos + 1 != 4 || yPos + 1 != 7))
-					|| (xPos == 4 && (yPos + 1 != 1 || yPos + 1 != 4 || yPos + 1 != 7))
-					|| (xPos == 7 && (yPos + 1 != 1 || yPos + 1 != 4 || yPos + 1 != 7))) {
+	int direction = random.nextInt(4);
+        int xPos = super.getX();
+        int yPos = super.getY();
+                
+	if (direction == 0) {
+            if (yPos < 8 || (xPos == 1 && (yPos + 1 != 1 || yPos + 1 != 4 || yPos + 1 != 7))
+			 || (xPos == 4 && (yPos + 1 != 1 || yPos + 1 != 4 || yPos + 1 != 7))
+                         || (xPos == 7 && (yPos + 1 != 1 || yPos + 1 != 4 || yPos + 1 != 7))) {
 				++yPos;
 			}
 		} else if (direction == 1) {
@@ -83,13 +64,5 @@ public class Assassin {
 			}
 		}
 
-	}
-	
-	public int getX(){
-		return xPos;
-	}
-	public int getY(){
-		return yPos;
-	}
-
+    }
 }

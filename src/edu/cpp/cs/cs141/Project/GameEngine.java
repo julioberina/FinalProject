@@ -24,18 +24,12 @@ public class GameEngine {
 	/**
 	 * A field that represents the agent that the user will play as.
 	 */
-	private Agent spy = new Agent();
+	private Agent spy;
 
 	/**
 	 * A field that represents the board that the user will be playing on
 	 */
 	private Board bldg;
-
-	/**
-	 * A field that represents the number of lives (or tries) that a player has.
-	 * The game ends when the user has no more lives.
-	 */
-	private int lives;
 
 	/**
 	 * The default constructor for the class GameEngine. Initially, the game
@@ -44,39 +38,7 @@ public class GameEngine {
 	 */
 	public GameEngine() {
 		bldg = new Board();
-		lives = 3;
-	}
-
-	/**
-	 * An overloaded constructor that will create a game engine based off of old
-	 * statistics from a game that the user previously saved.
-	 * 
-	 * @param oldGame
-	 *            - The previous board from the saved game that the user wants
-	 *            to load
-	 * @param prevLives
-	 *            - The previous amount of lives that the user had in the saved
-	 *            game
-	 */
-	public GameEngine(Board oldGame, int prevLives) {
-
-	}
-
-	/**
-	 * A method that decreases the players amount of lies every time they are
-	 * shot by an assassin
-	 */
-	public void loseLife() {
-		lives--;
-	}
-
-	/**
-	 * A method that returns the number of lives left. At 0 the game ends.
-	 * 
-	 * @return - Amount of lives remaining
-	 */
-	public int getLives() {
-		return lives;
+		spy = new Agent();
 	}
 
 	/**
@@ -84,9 +46,6 @@ public class GameEngine {
 	 * the player is in one of the surrounding squares, the player is shot and
 	 * dies.
 	 */
-	public void checkForKill() {
-
-	}
 
 	public int getAgentX() {
 		return spy.getX();

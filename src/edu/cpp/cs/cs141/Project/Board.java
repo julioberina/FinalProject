@@ -48,10 +48,10 @@ public class Board {
 	 */
 	private ArrayList<Room> room = new ArrayList<Room>();
 
-    private Agent agent;
-	protected Item invc;
-	protected Item radar;
-	protected Item extraBull;
+        private Agent agent;
+	private Item invc;
+	private Item radar;
+	private Item extraBull;
 
 	/**
 	 * A field that represents a 2-dimensional array of the building. It holds
@@ -230,14 +230,6 @@ public class Board {
 	}
 
 	/**
-	 * A method that represents killing one of the ninja assassins. The
-	 * ArrayList will remove an element for every ninja killed.
-	 */
-	public void killAssassin() {
-
-	}
-
-	/**
 	 * A method that will pick up whatever item the user has landed on at a
 	 * given location.
 	 * 
@@ -271,7 +263,7 @@ public class Board {
 	 */
 	private int randomGen(int max) {
 		Random rand = new Random();
-		return rand.nextInt(max - 1);
+		return rand.nextInt(max);
 	}
 
 	/**

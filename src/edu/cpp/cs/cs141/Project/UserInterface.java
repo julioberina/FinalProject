@@ -168,9 +168,7 @@ public class UserInterface {
 	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
 	 */
 	public void gameLoop(){
-		String direction;
-	
-		System.out.println(eng.getBoard().toString());
+		displayBoard();
 		getDirection();
 
 	}

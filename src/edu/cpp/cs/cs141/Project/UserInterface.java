@@ -163,9 +163,9 @@ public class UserInterface {
 					System.out.print("[" + eng.getBoard().viewSpace(i, j) + "]");				
 				else if (dir == DIRECTION.DOWN && i == eng.getAgentX() && (j == eng.getAgentY()-2 || j == eng.getAgentY()-1))
 					System.out.print("[" + eng.getBoard().viewSpace(i, j) + "]");	
-				else if (dir == DIRECTION.LEFT && j == eng.getAgentX() && (i == eng.getAgentY()-2 || i == eng.getAgentY()-1))
+				else if (dir == DIRECTION.LEFT && j == eng.getAgentY() && (i == eng.getAgentX()-2 || i == eng.getAgentX()-1))
 					System.out.print("[" + eng.getBoard().viewSpace(i, j) + "]");	
-				else if (dir == DIRECTION.RIGHT && j == eng.getAgentX() && (i == eng.getAgentY()+2 || i == eng.getAgentY()+1))
+				else if (dir == DIRECTION.RIGHT && j == eng.getAgentY() && (i == eng.getAgentX()+2 || i == eng.getAgentX()+1))
 					System.out.print("[" + eng.getBoard().viewSpace(i, j) + "]");	
 				else 
 					System.out.print("[*]");

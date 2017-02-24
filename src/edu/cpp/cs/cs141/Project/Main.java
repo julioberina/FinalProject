@@ -25,15 +25,8 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		boolean debug = false;
-		
-		
 		UserInterface ui = new UserInterface();
-
 		ui.displayMenu();
-		ui.gameLoop();
-
-
 	}
 
 }

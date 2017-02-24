@@ -46,7 +46,7 @@ public class UserInterface {
 	 * A method that displays the games overall menu. It will give the user the option to start, save, or load a game, and
 	 * give them the option to see the help screen.
 	 */
-	public void displayMenu(){
+	public void displayMenu() {
 		String choice, filename;
 		
 		System.out.println("Welcome, Agent Smith. We have a new assignment for you.\n "
@@ -168,9 +168,9 @@ public class UserInterface {
 	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
 	 */
 	public void gameLoop(){
+            
 		displayBoard();
 		getDirection();
-
 	}
 	
 	/**

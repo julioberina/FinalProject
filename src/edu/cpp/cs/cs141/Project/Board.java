@@ -10,6 +10,7 @@
  *   Isaac Kim
  *   Sean Ritchie
  *   Gina Rodil
+ * 
  */
  
 package edu.cpp.cs.cs141.Project;
@@ -80,7 +81,7 @@ public class Board {
 		
 		createBullet();
 		
-		agent = GameEngine.getAgent();
+		agent = new Agent();
 		for (int row=8; row >= 0 ; row-- ){
 			for (int column = 0; column < size; column++){					
 				if (row == agent.getX() && column == agent.getY())
@@ -363,6 +364,10 @@ public class Board {
 		return radar.getY();
 	}
 	
+	public Agent getAgent(){
+	    return agent;
+	}
+	
 	public String toString(){
 		String type = "";
 		for (int j=8 ; j>=0 ; j--){
@@ -379,6 +384,19 @@ public class Board {
 		for(int i = 0; i < 6; i++){
 			spyArray[i].move();
 		}
+	}
+	
+	
+	/**
+	 * A method that returns the character of whatever is occupying a certain spot in the building.
+	 * @param i
+	 * @param j
+	 * @return
+	 */
+	public char viewSpace(int i, int j){
+		char space = '*';
+		space = bldg[i][j];
+		return space;
 	}
 
 }

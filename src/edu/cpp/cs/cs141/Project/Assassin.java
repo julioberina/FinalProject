@@ -63,6 +63,8 @@ public class Assassin extends ActiveAgent {
 				--xPos;
 			}
 		}
+	super.setX(xPos);
+	super.setY(yPos);
 
     }
 }

@@ -21,15 +21,11 @@ import java.util.ArrayList;
  */
 public class GameEngine {
 
-	/**
-	 * A field that represents the agent that the user will play as.
-	 */
-	private static Agent spy;
 
 	/**
 	 * A field that represents the board that the user will be playing on
 	 */
-	private Board bldg;
+	private static Board bldg;
 
 	/**
 	 * The default constructor for the class GameEngine. Initially, the game
@@ -37,7 +33,6 @@ public class GameEngine {
 	 * locations every time it is created, and the player starts with 3 lives.
 	 */
 	public GameEngine() {
-            spy = new Agent();
             bldg = new Board();
 	}
 
@@ -47,14 +42,18 @@ public class GameEngine {
 	 * dies.
 	 */
 
+    public static Agent getAgent() {
+        return bldg.getAgent();
+    }
+	
 	public int getAgentX() {
-		return spy.getX();
+		return bldg.getAgent().getX();
 	}
 
 	public int getAgentY() {
-		return spy.getY();
-	}
-
+		return bldg.getAgent().getY();
+        }
+                
 	public boolean AssassinCoord(int i, int j) {
 		return bldg.AssassinCoord(i, j);
 	}
@@ -92,11 +91,8 @@ public class GameEngine {
 		return bldg.getRadarY();
 	}
         
-        public Board getBoard() {
-            return bldg;
-        }
-        
-        public static Agent getAgent() {
-            return spy;
-        }
+    public Board getBoard() {
+        return bldg;
+    }
+
 }

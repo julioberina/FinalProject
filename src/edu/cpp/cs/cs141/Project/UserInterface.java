@@ -171,6 +171,9 @@ public class UserInterface {
             
             while (eng.getAgent().isAlive()) {
 		displayBoard();
+                
+                // get input from lookDirection
+                // display two boxes with night vision goggles
                 displayNextTwo(lookDirection());
 		getDirection();
             }

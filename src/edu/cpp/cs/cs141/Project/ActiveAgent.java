@@ -47,11 +47,22 @@ public abstract class ActiveAgent {
         return yPos;
     }
     
-    public void kill(ActiveAgent other)
+    public boolean kill(ActiveAgent other)
     {
         --other.lives;
         
         if (other.lives == 0)
             alive = false;
+        
+        return true;
+    }
+    
+    public boolean isAlive()
+    {
+        return (alive == true);
+    }
+    
+    public boolean isDead() {
+        return (alive == false);
     }
 }

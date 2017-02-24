@@ -80,7 +80,7 @@ public class Board {
 		
 		createBullet();
 		
-		agent = new Agent();
+		agent = GameEngine.getAgent();
 		for (int row=8; row >= 0 ; row-- ){
 			for (int column = 0; column < size; column++){					
 				if (row == agent.getX() && column == agent.getY())

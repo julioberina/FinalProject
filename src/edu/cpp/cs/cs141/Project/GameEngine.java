@@ -24,7 +24,7 @@ public class GameEngine {
 	/**
 	 * A field that represents the agent that the user will play as.
 	 */
-	private Agent spy;
+	private static Agent spy;
 
 	/**
 	 * A field that represents the board that the user will be playing on
@@ -95,5 +95,8 @@ public class GameEngine {
         public Board getBoard() {
             return bldg;
         }
-
+        
+        public static Agent getAgent() {
+            return spy;
+        }
 }

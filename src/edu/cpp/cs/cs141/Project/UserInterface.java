@@ -46,7 +46,7 @@ public class UserInterface {
 	 * A method that displays the games overall menu. It will give the user the option to start, save, or load a game, and
 	 * give them the option to see the help screen.
 	 */
-	public void displayMenu() {
+	public void displayMenu(){
 		String choice, filename;
 		
 		System.out.println("Welcome, Agent Smith. We have a new assignment for you.\n "
@@ -87,7 +87,7 @@ public class UserInterface {
 			loadGame();
 		}
 		else if (choice.equalsIgnoreCase("N")){
-			gameLoop();
+			gameLoopDebug();
 		}
 		else if (choice.equalsIgnoreCase("Q")){
 			System.out.println("\nGood Bye.");
@@ -126,7 +126,7 @@ public class UserInterface {
 				if (i == eng.getAgentX() && j == eng.getAgentY()) {
 					System.out.print("[A]");
 				} else if (eng.AssassinCoord(i, j)) {
-					System.out.print("[S]");
+					System.out.print("[N]");
 				} else if (i == eng.getInvcX() && j == eng.getInvcY()) {
 					System.out.print("[I]");
 				} else if (i == eng.getBulletX() && j == eng.getBulletY()) {
@@ -151,12 +151,22 @@ public class UserInterface {
 	public void displayNextTwo(DIRECTION dir){
 		String[] legend = new String[]{"","I - Invincibility","R - Radar","B - Bullet",
 				"D - Look/Move Right", "A - Look/Move Left","S - Look/Move Down","W - Look/Move Up",""};
+		
+		
 		for (int j = 8; j >= 0; --j) {
 			for (int i = 0; i < 9; ++i) {
 				if (i == eng.getAgentX() && j == eng.getAgentY()) 
 					System.out.print("[A]");
 				else if (eng.validRoomCoords(i, j) || eng.validBriefcaseCoords(i, j)) 
 					System.out.print("[R]");
+				else if (dir == DIRECTION.UP && i == eng.getAgentX() && (j == eng.getAgentY()+2 || j == eng.getAgentY()+1))
+					System.out.print("[" + eng.getBoard().viewSpace(i, j) + "]");				
+				else if (dir == DIRECTION.DOWN && i == eng.getAgentX() && (j == eng.getAgentY()-2 || j == eng.getAgentY()-1))
+					System.out.print("[" + eng.getBoard().viewSpace(i, j) + "]");	
+				else if (dir == DIRECTION.LEFT && j == eng.getAgentX() && (i == eng.getAgentY()-2 || i == eng.getAgentY()-1))
+					System.out.print("[" + eng.getBoard().viewSpace(i, j) + "]");	
+				else if (dir == DIRECTION.RIGHT && j == eng.getAgentX() && (i == eng.getAgentY()+2 || i == eng.getAgentY()+1))
+					System.out.print("[" + eng.getBoard().viewSpace(i, j) + "]");	
 				else 
 					System.out.print("[*]");
 			}
@@ -167,10 +177,51 @@ public class UserInterface {
 	/**
 	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
 	 */
-	public void gameLoop(){
-            
-		displayBoard();
-		getDirection();
+	public void gameLoop(){		
+        while (eng.getAgent().isAlive()) {
+        	displayBoard();
+            displayNextTwo(lookDirection());
+            switch (getDirection()){
+            case UP:
+            	eng.getAgent().move('w');
+            	break;
+            case DOWN:
+            	eng.getAgent().move('s');
+            	break;
+            case LEFT:
+            	eng.getAgent().move('a');           	
+            	break;
+            case RIGHT:
+            	eng.getAgent().move('d');
+            	break;
+            }
+            eng.getBoard().ninjaMove();
+        }
+	}
+	
+	/**
+	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
+	 */
+	public void gameLoopDebug(){		
+        while (eng.getAgent().isAlive()) {
+        	displayBoardDebug();
+            displayNextTwo(lookDirection());
+            switch (getDirection()){
+            case UP:
+            	eng.getAgent().move('w');
+            	break;
+            case DOWN:
+            	eng.getAgent().move('s');
+            	break;
+            case LEFT:
+            	eng.getAgent().move('a');           	
+            	break;
+            case RIGHT:
+            	eng.getAgent().move('d');
+            	break;
+            }
+            eng.getBoard().ninjaMove();
+        }
 	}
 	
 	/**
@@ -179,22 +230,59 @@ public class UserInterface {
 	public DIRECTION getDirection(){
 		String choice="";
 		DIRECTION dir = null;
-		while (choice != "w" || choice != "a" || choice != "s" || choice != "d"){
-    		System.out.print("Choose direction (W-Up, A-Left, S-Down, D-Right): \t");
+        boolean choiceMade = false;
+		while (choiceMade == false) {
+    		System.out.print("Choose direction to move (W-Up, A-Left, S-Down, D-Right): \t");
     		choice = keyboard.nextLine();
-    		if (choice.equalsIgnoreCase("w"))
+    		if (choice.equalsIgnoreCase("w") && eng.getAgentY() < 8) {
     			dir = DIRECTION.UP;
-    		else if (choice.equalsIgnoreCase("a"))
+                        choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("a") && eng.getAgentX() > 0) {
     			dir = DIRECTION.LEFT;
-    		else if (choice.equalsIgnoreCase("s"))
+                        choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("s") && eng.getAgentY() > 0) {
     			dir = DIRECTION.DOWN;
-    		else if (choice.equalsIgnoreCase("d"))
+                        choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("d") && eng.getAgentX() < 8) {
     			dir = DIRECTION.RIGHT;
+                        choiceMade = true;
+                }
     		else System.out.println("Not a valid move. Try again.");
 		}
 		return dir;
 	}
 
+	
+	public DIRECTION lookDirection(){
+		String choice="";
+        boolean choiceMade = false;
+		DIRECTION dir = null;
+		while (choiceMade == false) {
+    		System.out.print("Choose direction to look (W-Up, A-Left, S-Down, D-Right): \t");
+    		choice = keyboard.nextLine();
+    		if (choice.equalsIgnoreCase("w") && eng.getAgentY() < 8) {
+    			dir = DIRECTION.UP;
+                choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("a") && eng.getAgentX() > 0) {
+    			dir = DIRECTION.LEFT;
+                choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("s") && eng.getAgentY() > 0) {
+    			dir = DIRECTION.DOWN;
+                choiceMade = true;
+                }
+    		else if (choice.equalsIgnoreCase("d") && eng.getAgentX() < 8) {
+    			dir = DIRECTION.RIGHT;
+                choiceMade = true;
+                }
+    		else System.out.println("Not a valid move. Try again.");
+		}
+		return dir;
+	}
 
 	/**
 	 * A method that will allow the user to quit their current game and save their progress to a specified file location.

@@ -73,6 +73,10 @@ public class UserInterface {
 		}
 		else if (choice.equalsIgnoreCase("L")){
 			loadGame();
+                        if (eng.getDebugMode() == true)
+                            gameLoopDebug();
+                        else
+                            gameLoop();
 		}
 		else if (choice.equalsIgnoreCase("N")){
 			gameLoop();
@@ -167,7 +171,7 @@ public class UserInterface {
 	/**
 	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
 	 */
-	public void gameLoop(){
+	public void gameLoop() throws IOException {
         eng.setDebugMode(false);
         while (eng.getAgent().isAlive()) {
         	displayBoard();
@@ -211,7 +215,7 @@ public class UserInterface {
 	/**
 	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
 	 */
-	public void gameLoopDebug(){
+	public void gameLoopDebug() throws IOException {
             eng.setDebugMode(true);
         while (eng.getAgent().isAlive()) {
         	displayBoardDebug();
@@ -254,7 +258,7 @@ public class UserInterface {
 	/**
 	 * @return
 	 */
-	public DIRECTION getDirection(){
+	public DIRECTION getDirection() throws IOException {
 		String choice="";
 		DIRECTION dir = null;
         boolean choiceMade = false;
@@ -279,13 +283,17 @@ public class UserInterface {
                 }
     		else if (choice.equalsIgnoreCase("q"))
     			System.exit(0);
+                else if (choice.equalsIgnoreCase("sf")) {
+                        saveGame();
+                        System.exit(0);
+                }
     		else System.out.println("Not a valid move. Try again.");
 		}
 		return dir;
 	}
 
 	
-	public DIRECTION lookDirection(){
+	public DIRECTION lookDirection() throws IOException {
 		String choice="";
         boolean choiceMade = false;
 		DIRECTION dir = null;
@@ -310,6 +318,10 @@ public class UserInterface {
                 }
     		else if (choice.equalsIgnoreCase("q"))
     			System.exit(0);
+                else if (choice.equalsIgnoreCase("sf")) {
+                    saveGame();
+                    System.exit(0);
+                }
     		else System.out.println("Not a valid move. Try again.");
 		}
 		return dir;

@@ -25,7 +25,7 @@ public class GameEngine {
 	/**
 	 * A field that represents the board that the user will be playing on
 	 */
-	private static Board bldg;
+	private Board bldg;
 
 	/**
 	 * A field that represents the number of lives (or tries) that a player has.

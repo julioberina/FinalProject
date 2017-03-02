@@ -27,6 +27,7 @@ public class SaveData {
         private Board board;
         private int lives;
         private boolean foundBriefcase;
+        private boolean debugMode;
     
 	public SaveData() {
 		// TODO Auto-generated constructor stub
@@ -34,17 +35,20 @@ public class SaveData {
                 board = null;
                 lives = 0;
                 foundBriefcase = false;
+                debugMode = false;
 	}
         
-        public void save(Board board, int lives, boolean found, String fname) throws IOException
+        public void save(Board board, int lives, boolean found, boolean debug, String fname) throws IOException
         {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("memorycard/" + fname + ".dat"));
             this.board = board;
             this.lives = lives;
             foundBriefcase = found;
+            debugMode = debug;
             oos.writeObject(this.board);
             oos.writeInt(this.lives);
             oos.writeBoolean(this.foundBriefcase);
+            oos.writeBoolean(this.debugMode);
             oos.close();
         }
         
@@ -54,6 +58,8 @@ public class SaveData {
             this.board = (Board)ois.readObject();
             this.lives = ois.readInt();
             this.foundBriefcase = ois.readBoolean();
+            this.debugMode = ois.readBoolean();
+            ois.close();
         }
         
         public Board getBoard()
@@ -69,5 +75,10 @@ public class SaveData {
         public boolean getFoundBriefcase()
         {
             return foundBriefcase;
+        }
+        
+        public boolean getDebugMode()
+        {
+            return debugMode;
         }
 }

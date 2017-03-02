@@ -14,6 +14,8 @@
 package edu.cpp.cs.cs141.Project;
 
 import java.util.Scanner;
+import java.io.IOException;
+import java.io.File;
 
 /**
  * @author AlternativeFAQs
@@ -46,7 +48,7 @@ public class UserInterface {
 	 * A method that displays the games overall menu. It will give the user the option to start, save, or load a game, and
 	 * give them the option to see the help screen.
 	 */
-	public void displayMenu(){
+	public void displayMenu() throws IOException, ClassNotFoundException {
 		String choice, filename;
 		
 		System.out.println("Welcome, Agent Smith. We have a new assignment for you.\n "
@@ -165,7 +167,8 @@ public class UserInterface {
 	/**
 	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
 	 */
-	public void gameLoop(){		
+	public void gameLoop(){
+        eng.setDebugMode(false);
         while (eng.getAgent().isAlive()) {
         	displayBoard();
             displayNextTwo(lookDirection());
@@ -208,7 +211,8 @@ public class UserInterface {
 	/**
 	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
 	 */
-	public void gameLoopDebug(){		
+	public void gameLoopDebug(){
+            eng.setDebugMode(true);
         while (eng.getAgent().isAlive()) {
         	displayBoardDebug();
             switch (getDirection()){
@@ -346,16 +350,21 @@ public class UserInterface {
 	 * This will ask the user for the location to save the game and copy all the data of the current state of the game from
 	 * the game engine.  
 	 */
-	public void saveGame(){
-		String save, filename;
+	public void saveGame() throws IOException {
+		String save, filename = "";
+                SaveData sd = new SaveData();
 		
 		System.out.println("Are you sure you would like to quit this game and save? (Y/N)");
 		save = keyboard.nextLine();
 		if (save.equalsIgnoreCase("Y") || save.equalsIgnoreCase("YES")){
-			System.out.println("Enter the file location where you would like to save this game:");
-			filename = keyboard.nextLine();
 			
-			}
+                        while (filename.length() == 0) {
+                            System.out.println("Enter the save file name (no file extension):  ");
+                            filename = keyboard.nextLine();
+                        }
+                        
+                        sd.save(eng.getBoard(), eng.getLives(), eng.briefcaseFound(), eng.getDebugMode(), filename);
+		}
 	}
 	
 	/**
@@ -364,13 +373,30 @@ public class UserInterface {
 	 * from the previous game engine. 
 	 * @return - The class GameEngine with previous data and statistics from an older game.
 	 */
-	public void loadGame(){
-		String filename;
-		
-		System.out.print("Enter file location:\n\t");
-		filename = keyboard.nextLine();
+	public void loadGame() throws IOException, ClassNotFoundException {
+                File saveFolder = new File("memorycard/");
+                File[] saveFiles = saveFolder.listFiles();
+		String filename = "";
+                SaveData sd = new SaveData();                
+                
+                
+                System.out.println("Here is a list of save files: ");
+                for (int i = 0; i < saveFiles.length; ++i)
+                    System.out.println(saveFiles[i]);
+                
+                System.out.print("\n");
+                
+                while (filename.length() == 0) {
+                    System.out.print("Enter file to load (no file extension):  ");
+                    filename = keyboard.nextLine();
+                }
+                
 		//Call method from SaveData
-		
+                sd.load(filename);
+		eng.loadBoard(sd.getBoard());
+                eng.loadLives(sd.getLives());
+                eng.loadFoundBriefcase(sd.getFoundBriefcase());
+                eng.setDebugMode(sd.getDebugMode());
 	}
 	
 }

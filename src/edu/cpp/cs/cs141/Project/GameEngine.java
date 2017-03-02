@@ -34,6 +34,8 @@ public class GameEngine {
 	private int lives;
 	
 	private boolean foundBriefcase;
+        
+        private boolean debugMode;
 
 	/**
 	 * The default constructor for the class GameEngine. Initially, the game
@@ -43,6 +45,7 @@ public class GameEngine {
 	public GameEngine() {
 		bldg = new Board();
 		lives = 3;
+                debugMode = false;
 	}
 
 	/**
@@ -260,4 +263,28 @@ public class GameEngine {
 		return bldg.getRadarY();
 	}
 
+        public void setDebugMode(boolean debug)
+        {
+            debugMode = debug;
+        }
+        
+        public boolean getDebugMode()
+        {
+            return debugMode;
+        }
+        
+        public void loadBoard(Board board)
+        {
+            bldg = board;
+        }
+        
+        public void loadLives(int lives)
+        {
+            this.lives = lives;
+        }
+        
+        public void loadFoundBriefcase(boolean found)
+        {
+            foundBriefcase = found;
+        }
 }

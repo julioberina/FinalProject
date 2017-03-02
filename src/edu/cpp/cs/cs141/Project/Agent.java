@@ -28,7 +28,6 @@ public class Agent extends ActiveAgent {
     /**
 	 * 0 for up, 1 for right, 2 for down, 3 for left.
 	 */
-<<<<<<< HEAD
     public boolean move(char direction) {
         int xPos = super.getX();
         int yPos = super.getY();
@@ -66,41 +65,4 @@ public class Agent extends ActiveAgent {
 	return canMove;
     }
     
-=======
-	public void move(char direction) {
-        int xPos = super.getX();
-        int yPos = super.getY();
-                
-        if (direction == 'w') {
-            if (yPos < 8 || (xPos == 1 && (yPos + 1 != 1 || yPos + 1 != 4 || yPos + 1 != 7))
-			 || (xPos == 4 && (yPos + 1 != 1 || yPos + 1 != 4 || yPos + 1 != 7))
-                         || (xPos == 7 && (yPos + 1 != 1 || yPos + 1 != 4 || yPos + 1 != 7))) {
-				++yPos;
-			}
-		} else if (direction == 'd') {
-			if (xPos < 8 || (yPos == 1 && (xPos + 1 != 1 || xPos + 1 != 4 || xPos + 1 != 7))
-					|| (yPos == 4 && (xPos + 1 != 1 || xPos + 1 != 4 || xPos + 1 != 7))
-					|| (yPos == 7 && (xPos + 1 != 1 || xPos + 1 != 4 || xPos + 1 != 7))) {
-				++xPos;
-			}
-		} else if (direction == 's') {
-			if (yPos > 0 || (xPos == 1 && (yPos - 1 != 1 || yPos - 1 != 4 || yPos - 1 != 7))
-					|| (xPos == 4 && (yPos - 1 != 1 || yPos - 1 != 4 || yPos - 1 != 7))
-					|| (xPos == 7 && (yPos - 1 != 1 || yPos - 1 != 4 || yPos - 1 != 7))) {
-				--yPos;
-			}
-		} else if (direction == 'a') {
-			if (xPos > 0 || (yPos == 1 && (xPos - 1 != 1 || xPos - 1 != 4 || xPos - 1 != 7))
-					|| (yPos == 4 && (xPos - 1 != 1 || xPos - 1 != 4 || xPos - 1 != 7))
-					|| (yPos == 7 && (xPos - 1 != 1 || xPos - 1 != 4 || xPos + 1 != 7))) {
-				--xPos;
-			}
-		}
-	super.setX(xPos);
-	super.setY(yPos);
-
-    }
-    
-    
->>>>>>> 2556378a6477488551744bd37ddb9322fa457a3f
 }

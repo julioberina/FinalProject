@@ -73,7 +73,7 @@ public class UserInterface {
 			loadGame();
 		}
 		else if (choice.equalsIgnoreCase("N")){
-			gameLoop();
+			gameLoopDebug();
 		}
 		else if (choice.equalsIgnoreCase("Q")){
 			System.out.println("\nGood Bye.");
@@ -140,7 +140,11 @@ public class UserInterface {
 		String[] legend = new String[]{"","I - Invincibility","R - Radar","B - Bullet",
 				"D - Look/Move Right", "A - Look/Move Left","S - Look/Move Down","W - Look/Move Up",""};
 		
+<<<<<<< HEAD
 		System.out.println();
+=======
+		
+>>>>>>> 2556378a6477488551744bd37ddb9322fa457a3f
 		for (int j = 8; j >= 0; --j) {
 			for (int i = 0; i < 9; ++i) {
 				if (i == eng.getAgentX() && j == eng.getAgentY()) 
@@ -170,6 +174,7 @@ public class UserInterface {
         	displayBoard();
             displayNextTwo(lookDirection());
             switch (getDirection()){
+<<<<<<< HEAD
             case UP:{
             	if (eng.movedUp())
             		eng.useItem();
@@ -202,6 +207,22 @@ public class UserInterface {
             	eng.startOver();
             	break;
             }
+=======
+            case UP:
+            	eng.getAgent().move('w');
+            	break;
+            case DOWN:
+            	eng.getAgent().move('s');
+            	break;
+            case LEFT:
+            	eng.getAgent().move('a');           	
+            	break;
+            case RIGHT:
+            	eng.getAgent().move('d');
+            	break;
+            }
+            eng.getBoard().ninjaMove();
+>>>>>>> 2556378a6477488551744bd37ddb9322fa457a3f
         }
 	}
 	
@@ -211,6 +232,7 @@ public class UserInterface {
 	public void gameLoopDebug(){		
         while (eng.getAgent().isAlive()) {
         	displayBoardDebug();
+<<<<<<< HEAD
             switch (getDirection()){
             case UP:{
             	if (eng.getAgent().move('w')) 
@@ -244,6 +266,24 @@ public class UserInterface {
             	eng.startOver();
             	break;
             }
+=======
+            displayNextTwo(lookDirection());
+            switch (getDirection()){
+            case UP:
+            	eng.getAgent().move('w');
+            	break;
+            case DOWN:
+            	eng.getAgent().move('s');
+            	break;
+            case LEFT:
+            	eng.getAgent().move('a');           	
+            	break;
+            case RIGHT:
+            	eng.getAgent().move('d');
+            	break;
+            }
+            eng.getBoard().ninjaMove();
+>>>>>>> 2556378a6477488551744bd37ddb9322fa457a3f
         }
 	}
 	
@@ -286,7 +326,11 @@ public class UserInterface {
         boolean choiceMade = false;
 		DIRECTION dir = null;
 		while (choiceMade == false) {
+<<<<<<< HEAD
     		System.out.print("\nChoose direction to look (W-Up, A-Left, S-Down, D-Right): \t");
+=======
+    		System.out.print("Choose direction to look (W-Up, A-Left, S-Down, D-Right): \t");
+>>>>>>> 2556378a6477488551744bd37ddb9322fa457a3f
     		choice = keyboard.nextLine();
     		if (choice.equalsIgnoreCase("w") && eng.getAgentY() < 8) {
     			dir = DIRECTION.UP;

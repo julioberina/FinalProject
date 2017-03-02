@@ -1,6 +1,6 @@
 /**
  * CS 141: Intro to Programming and Problem Solving
- * Professor: Edwin Rodríguez
+ * Professor: Edwin RodrÃ­guez
  *
  * Final Project
  * * <description-of-assignment>
@@ -11,9 +11,7 @@
  *   Sean Ritchie
  *   Gina Rodil
  */
- 
 package edu.cpp.cs.cs141.Project;
-
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -43,15 +41,16 @@ public class Board {
 	private ArrayList<Assassin> ninjas = new ArrayList<Assassin>();
 
 	/**
-	 * Creates a list of rooms. Later converts to an array to get individual
-	 * rooms
+	 * Creates a list of rooms. Later converts to an array to get individual rooms
 	 */
 	private ArrayList<Room> room = new ArrayList<Room>();
 
-        private Agent agent;
-	private Item invc;
-	private Item radar;
-	private Item extraBull;
+	private Agent agent;
+
+	protected Item invc;
+	protected Item radar;
+	protected Item extraBull;
+	protected Gun gun;
 
 	/**
 	 * A field that represents a 2-dimensional array of the building. It holds
@@ -68,19 +67,14 @@ public class Board {
 	 * hand side of the board.
 	 */
 	public Board() {
-
-
 		initializeRooms();
-		
 		initializeNinjas();
-
 		createInvincibility();
-		
 		createRadar();
-		
 		createBullet();
-		
-		agent = GameEngine.getAgent();
+
+		agent = new Agent();
+		gun = new Gun();
 		for (int row=8; row >= 0 ; row-- ){
 			for (int column = 0; column < size; column++){					
 				if (row == agent.getX() && column == agent.getY())
@@ -104,7 +98,8 @@ public class Board {
 		
 	}
 	
-	private void initializeNinjas(){
+	
+	public void initializeNinjas(){
 		Assassin[] spyArray = (Assassin[]) ninjas.toArray(new Assassin[6]);
 		Room[] roomArray = (Room[]) room.toArray(new Room[6]);
 		int ninjaX = 0;
@@ -149,7 +144,11 @@ public class Board {
 		}
 	}
 	
-	private void initializeRooms(){
+	public ArrayList<Assassin> getNinjas(){
+		return ninjas;
+	}
+
+	public void initializeRooms(){
 		briefcaseRoomNum = randomGen(9);
 		room.add(new Room(1, 1));
 		room.add(new Room(4, 1));
@@ -162,7 +161,9 @@ public class Board {
 		room.add(new Room(7, 7));
 		room.get(briefcaseRoomNum).setBriefcase();
 	}
-	
+
+
+
 	private void createInvincibility(){
 		boolean validRoomCheck = false;
 		int itemX = 0;
@@ -229,50 +230,33 @@ public class Board {
 		extraBull = new ExtraBullet(itemX, itemY);
 	}
 
+	
 	/**
-	 * A method that will pick up whatever item the user has landed on at a
-	 * given location.
-	 * 
-	 * @param i
-	 *            - The row number of the location
-	 * @param j
-	 *            - The column number of the location
-	 * @return - The Item in that location
+	 * A method that represents killing one of the ninja assassins. The
+	 * ArrayList will remove an element for every ninja killed.
 	 */
-	public Item getItem(int i, int j) {
-		return null;
+	public void killAssassin() {
+
 	}
 
-	/**
-	 * A method that relays whether the user found the briefcase or not
-	 * 
-	 * @return - A boolean that is true if the player reached the correct room,
-	 *         or false if not.
-	 */
-	public boolean briefcaseFound() {
-		return false;
-	}
 
 	/**
-	 * @param max
-	 *            The maximum bound of the return value The max value you want
-	 *            selected. For example, if you want to pick from numbers 1
-	 *            through 9, you enter 9. The output ends up being 0 through 8,
-	 *            but the odds are still the same.
+	 * @param max The maximum bound of the return value
+	 *            The max value you want selected. For example, if you want to
+	 *            pick from numbers 1 through 9, you enter 9. The output ends up
+	 *            being 0 through 8, but the odds are still the same.
 	 * @return the random selected number within the bounds.
 	 */
 	private int randomGen(int max) {
 		Random rand = new Random();
-		return rand.nextInt(max);
+		return rand.nextInt(max - 1);
 	}
 
 	/**
-	 * @param min
-	 *            minimum bound to be returned
-	 * @param max
-	 *            max bound to be returned
-	 * @return The randomly generated value between the bounds Overrides
-	 *         randomGen(int)
+	 * @param min minimum bound to be returned
+	 * @param max max bound to be returned
+	 * @return The randomly generated value between the bounds
+	 * Overrides randomGen(int)
 	 */
 	private int randomGen(int min, int max) {
 		Random rand = new Random();
@@ -280,12 +264,9 @@ public class Board {
 	}
 
 	/**
-	 * @param x
-	 *            x Coord
-	 * @param y
-	 *            y Coord
-	 * @return A check to see if the input coords match with the assasin coords
-	 *         to out put them
+	 * @param x x Coord
+	 * @param y y Coord
+	 * @return A check to see if the input coords match with the assasin coords to out put them
 	 */
 	public boolean AssassinCoord(int x, int y) {
 		Assassin[] spyArray = (Assassin[]) ninjas.toArray(new Assassin[6]);
@@ -300,12 +281,10 @@ public class Board {
 	}
 
 	/**
-	 * @param x
-	 *            x coord
-	 * @param y
-	 *            y coord
-	 * @return whether or not a room has a briefcase called from the user
-	 *         interface to check whether a room has a briefcase.
+	 * @param x x coord
+	 * @param y y coord
+	 * @return whether or not a room has a briefcase
+	 * called from the user interface to check whether a room has a briefcase.
 	 */
 	public boolean validBriefcaseCoords(int x, int y) {
 		int counter = 0;
@@ -320,15 +299,13 @@ public class Board {
 	}
 
 	/**
-	 * @param x
-	 *            x coord
-	 * @param y
-	 *            y coord
-	 * @return whether or not a coord is a room or not call traces back to the
-	 *         print board call.
+	 * @param x x coord
+	 * @param y y coord
+	 * @return whether or not a coord is a room or not 
+	 * call traces back to the print board call.
 	 */
 	public boolean validRoomCoords(int x, int y) {
-				int counter = 0;
+		int counter = 0;
 		for (int i = 1 ; i < 8 ; i += 3){
 			for (int j = 1 ; j < 8 ; j+=3 ){
 				if ( x==i && y==j && briefcaseRoomNum != counter)
@@ -337,6 +314,10 @@ public class Board {
 			}
 		}
 		return false;
+	}
+	
+	public Gun getGun(){
+		return gun;
 	}
 
 	public int getInvcX() {
@@ -363,6 +344,10 @@ public class Board {
 		return radar.getY();
 	}
 	
+	public Agent getAgent(){
+		return agent;
+	}
+
 	public String toString(){
 		String type = "";
 		for (int j=8 ; j>=0 ; j--){
@@ -376,9 +361,44 @@ public class Board {
 	
 	public void ninjaMove() {
 		Assassin[] spyArray = (Assassin[]) ninjas.toArray(new Assassin[6]);
-		for(int i = 0; i < 6; i++){
-			spyArray[i].move();
-		}
-	}
 
+		for(int i = 0; i < 6; i++){
+			int direction = randomGen(4);
+			int xPos = spyArray[i].getX();
+			int yPos = spyArray[i].getY();
+	        switch(direction){
+	        case 0: 
+	        	if (spyArray[i].canMove('w') && !AssassinCoord(xPos,yPos+1))
+	        		++yPos;
+	        	break;
+	        case 1:
+	        	if (spyArray[i].canMove('d') && !AssassinCoord(xPos+1,yPos))
+	        		++xPos;
+	        	break;
+	        case 2:
+	        	if (spyArray[i].canMove('s') && !AssassinCoord(xPos,yPos-1))
+	        		--yPos;
+	        	break;
+	        case 3:
+	        	if (spyArray[i].canMove('a') && !AssassinCoord(xPos-1,yPos))
+	        		--xPos;
+	        	break;
+			}
+	    	spyArray[i].setX(xPos);
+			spyArray[i].setY(yPos);
+		}
+		
+	}
+	
+	/**
+	 * A method that returns the character of whatever is occupying a certain spot in the building.
+	 * @param i
+	 * @param j
+	 * @return
+	 */
+	public char viewSpace(int i, int j){
+		char space = '*';
+		space = bldg[i][j];
+		return space;
+	}
 }

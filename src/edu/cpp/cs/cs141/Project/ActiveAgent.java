@@ -12,11 +12,12 @@
  *   Gina Rodil
  */
 package edu.cpp.cs.cs141.Project;
+import java.io.Serializable;
 
 /**
  * @author AlternativeFAQs 
  */
-public abstract class ActiveAgent {
+public abstract class ActiveAgent implements Serializable {
     
     private int xPos;
     private int yPos;

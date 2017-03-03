@@ -12,20 +12,23 @@
  *   Gina Rodil
  */
 package edu.cpp.cs.cs141.Project;
+import java.io.Serializable;
 
 /**
  * @author AlternativeFAQs
  *
  */
-public abstract class Item {
+public abstract class Item implements Serializable {
     protected int xPos;
 	protected int yPos;
     
 	/**
 	 * 
 	 */
-	public Item() {
+	public Item(int x, int y) {
 		// TODO Auto-generated constructor stub
+                xPos = x;
+                yPos = y;
 	}
 	
 	public int getX() {

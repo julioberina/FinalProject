@@ -13,12 +13,12 @@
  */
 package edu.cpp.cs.cs141.Project;
 
-
+import java.io.Serializable;
 /**
  * @author AlternativeFAQs
  * This class represents the entity that the user plays as. 
  */
-public class Agent extends ActiveAgent {
+public class Agent extends ActiveAgent implements Serializable {
     
     public Agent() {
 	super(0, 0, 3);

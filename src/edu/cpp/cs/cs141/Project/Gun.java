@@ -1,6 +1,6 @@
 /**
  * CS 141: Intro to Programming and Problem Solving
- * Professor: Edwin Rodríguez
+ * Professor: Edwin RodrÃ­guez
  *
  * Final Project
  * * <description-of-assignment>
@@ -13,13 +13,14 @@
  */
 package edu.cpp.cs.cs141.Project;
 
+import java.io.Serializable;
 /**
  * @author AlternativeFAQs
  * An entity that represents the players gun (and if applicable, ammunition). This is an extension of the superclass Item. 
  * The Gun is just one of the few items that the player can carry with him. If the player has not yet used the first 
  * equipped bullet and tries to gain another, the powerup will have no effect.
  */
-public class Gun extends Item {
+public class Gun implements Serializable {
 
 	/**
 	 * A field that represents the amount of bullets contained in the players gun.
@@ -46,6 +47,10 @@ public class Gun extends Item {
 	 */
 	public int seeAmmo(){
 		return ammo;
+	}
+	
+	public void reload(){
+		ammo = 1;
 	}
 	
 }

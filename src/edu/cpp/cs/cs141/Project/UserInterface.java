@@ -13,9 +13,9 @@
  */
 package edu.cpp.cs.cs141.Project;
 
-import java.util.Scanner;
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * @author AlternativeFAQs
@@ -33,6 +33,8 @@ public class UserInterface {
 	 */
 	private Scanner keyboard;
 	
+	private boolean debugMode;
+	
 	public static enum DIRECTION {UP,DOWN,LEFT,RIGHT};
 	
 	/**
@@ -49,7 +51,7 @@ public class UserInterface {
 	 * give them the option to see the help screen.
 	 */
 	public void displayMenu() throws IOException, ClassNotFoundException {
-		String choice, filename;
+		String choice;
 		
 		System.out.println("Welcome, Agent Smith. We have a new assignment for you.\n "
 				+ "Retrieve the briefcase with classified documents hidden in one of the 9 rooms.\n "
@@ -64,22 +66,21 @@ public class UserInterface {
 		}
 		else if (choice.equalsIgnoreCase("D")){
 			while (eng.getLives()>0 && !eng.briefcaseFound()){
-				gameLoopDebug();
+				debugMode=true;
+				gameLoop(debugMode);
 			}
-			if (eng.getLives()==0)
-				System.out.println("\n\nMission Failed");
-			else if (eng.briefcaseFound())
-				System.out.println("\n\nMission Accomplished.");
+			displayResult();
 		}
 		else if (choice.equalsIgnoreCase("L")){
 			loadGame();
-                        if (eng.getDebugMode() == true)
-                            gameLoopDebug();
-                        else
-                            gameLoop();
 		}
 		else if (choice.equalsIgnoreCase("N")){
-			gameLoop();
+			while (eng.getLives()>0 && !eng.briefcaseFound()){
+				debugMode=false;
+				gameLoop(debugMode);
+			}
+			displayResult();
+
 		}
 		else if (choice.equalsIgnoreCase("Q")){
 			System.out.println("\nGood Bye.");
@@ -121,7 +122,7 @@ public class UserInterface {
 					System.out.print("[A]");
 				} else if (eng.AssassinCoord(i, j)) {
 					System.out.print("[N]");
-				} else if (i == eng.getInvcX() && j == eng.getInvcY()) {
+				} else if (i == eng.getBoard().getInvc().getX() && j == eng.getBoard().getInvc().getY()) {
 					System.out.print("[I]");
 				} else if (i == eng.getBulletX() && j == eng.getBulletY()) {
 					System.out.print("[B]");
@@ -171,37 +172,24 @@ public class UserInterface {
 	/**
 	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
 	 */
-	public void gameLoop() throws IOException {
-        eng.setDebugMode(false);
+	public void gameLoop(boolean debug) throws IOException {		
         while (eng.getAgent().isAlive()) {
-        	displayBoard();
-            displayNextTwo(lookDirection());
-            switch (getDirection()){
-            case UP:{
-            	if (eng.movedUp())
-            		eng.useItem();
-            	else System.out.println("Unable to move.");
-            	break;}
-            case DOWN:{
-            	if (eng.checkRoom())
-            		break;
-            	if (eng.movedDown())
-            		eng.useItem();
-            	else System.out.println("Unable to move.");
-            	break;}
-            case LEFT:{
-            	if (eng.movedLeft())
-            		eng.useItem();
-            	else System.out.println("Unable to move.");           	
-            	break;}
-            case RIGHT:{
-            	if (eng.movedRight())
-            		eng.useItem();
-            	else System.out.println("Unable to move.");
-            	break;}
-            }
+        	if (debug==false){
+            	displayBoard();
+                displayNextTwo(lookDirection());
+        	}
+        	else if (debug==true)
+        		displayBoardDebug();
+        	agentMove();
+        	checkItems();
             if (eng.briefcaseFound())
+            	break;   
+            
+            if (eng.foundInvincibility() && eng.getBoard().getInvc().getTurns()>0){
+            	eng.getBoard().getInvc().use();
             	break;
+            }
+            
             eng.getBoard().ninjaMove();
             if (eng.checkForKill()){
             	eng.loseLife();
@@ -209,51 +197,64 @@ public class UserInterface {
             	eng.startOver();
             	break;
             }
+            
+            
+            
         }
 	}
 	
-	/**
-	 * A method that will continually ask the user to take their turn until they run out of lives or choose to quit the game
-	 */
-	public void gameLoopDebug() throws IOException {
-            eng.setDebugMode(true);
-        while (eng.getAgent().isAlive()) {
-        	displayBoardDebug();
-            switch (getDirection()){
-            case UP:{
-            	if (eng.getAgent().move('w')) 
-            		eng.getAgent().setY(eng.getAgentY()+1);
-            	else System.out.println("Unable to move.");
-            	break;}
-            case DOWN:{
-            	if (eng.checkRoom())
-            		break;
-            	if (eng.getAgent().move('s')) 
-            		eng.getAgent().setY(eng.getAgentY()-1);
-            	else System.out.println("Unable to move.");
-            	break;}
-            case LEFT:{
-            	if (eng.getAgent().move('a')) 
-            		eng.getAgent().setX(eng.getAgentX()-1);
-            	else System.out.println("Unable to move.");           	
-            	break;}
-            case RIGHT:{
-            	if (eng.getAgent().move('d')) 
-            		eng.getAgent().setX(eng.getAgentX()+1);
-            	else System.out.println("Unable to move.");
-            	break;}
-            }
-            if (eng.briefcaseFound())
-            	break;
-            eng.getBoard().ninjaMove();
-            if (eng.checkForKill()){
-            	eng.loseLife();
-            	System.out.println("\n\nA ninja killed you!\n\n");
-            	eng.startOver();
-            	break;
-            }
+	public void checkItems(){
+        if (eng.foundRadar()){
+        	String row="", column="";
+        	int[] location = eng.getBoard().getDocLocation();
+    		if (location[0]==1)
+    			row = "bottom";
+    		if (location[0]==4)
+    			row = "middle";
+    		if (location[0]==7)
+    			row = "top";
+    		if (location[1]==1)
+    			column = "left";
+    		if (location[1]==4)
+    			column = "middle";
+    		if (location[1]==7)
+    			column = "right";
+        	System.out.println("\n\nRadar Found. Documents are in the room at \nthe " + row + 
+        			" row and " + column + " column.");
+        }
+
+        if (eng.foundBullet()){
+        	System.out.println("\n\nGun Reloaded. Ammo = 1");
         }
 	}
+	
+	public void agentMove() throws IOException {
+		switch (getDirection()){
+        case UP:{
+        	if (eng.movedUp())
+        		eng.useGun();
+        	else System.out.println("Unable to move.");
+        	break;}
+        case DOWN:{
+        	if (eng.checkRoom())
+        		break;
+        	if (eng.movedDown())
+        		eng.useGun();
+        	else System.out.println("Unable to move.");
+        	break;}
+        case LEFT:{
+        	if (eng.movedLeft())
+        		eng.useGun();
+        	else System.out.println("Unable to move.");           	
+        	break;}
+        case RIGHT:{
+        	if (eng.movedRight())
+        		eng.useGun();
+        	else System.out.println("Unable to move.");
+        	break;}
+        }
+	}
+	
 	
 	/**
 	 * @return
@@ -283,10 +284,9 @@ public class UserInterface {
                 }
     		else if (choice.equalsIgnoreCase("q"))
     			System.exit(0);
-                else if (choice.equalsIgnoreCase("sf")) {
+                else if (choice.equalsIgnoreCase("m"))
                         saveGame();
-                        System.exit(0);
-                }
+                    
     		else System.out.println("Not a valid move. Try again.");
 		}
 		return dir;
@@ -318,10 +318,8 @@ public class UserInterface {
                 }
     		else if (choice.equalsIgnoreCase("q"))
     			System.exit(0);
-                else if (choice.equalsIgnoreCase("sf")) {
-                    saveGame();
-                    System.exit(0);
-                }
+                else if (choice.equalsIgnoreCase("m"))
+                        saveGame();
     		else System.out.println("Not a valid move. Try again.");
 		}
 		return dir;
@@ -356,7 +354,24 @@ public class UserInterface {
 		System.out.println(displaytext);
 		displayBoardDebug();
 	}
+	
+	public void displayResult(){
+		if (eng.getLives()==0)
+			System.out.println("\n\nMission Failed");
+		else if (eng.briefcaseFound())
+			System.out.println("\n\nMission Accomplished.");
+	}
 
+	public boolean replay(){
+		boolean replay = true;
+		String again;
+		System.out.print("Would you like to play Again? (Y/N);\t\t");
+		again = keyboard.nextLine();
+		if (again.equalsIgnoreCase("N"))
+			replay = false;
+		return replay;
+	}
+	
 	/**
 	 * A method that will allow the user to quit their current game and save their progress to a specified file location.
 	 * This will ask the user for the location to save the game and copy all the data of the current state of the game from
@@ -375,7 +390,8 @@ public class UserInterface {
                             filename = keyboard.nextLine();
                         }
                         
-                        sd.save(eng.getBoard(), eng.getLives(), eng.briefcaseFound(), eng.getDebugMode(), filename);
+                        sd.save(eng.getBoard(), eng.getLives(), eng.briefcaseFound(), debugMode, filename);
+                        System.exit(0);
 		}
 	}
 	
@@ -408,7 +424,8 @@ public class UserInterface {
 		eng.loadBoard(sd.getBoard());
                 eng.loadLives(sd.getLives());
                 eng.loadFoundBriefcase(sd.getFoundBriefcase());
-                eng.setDebugMode(sd.getDebugMode());
+                debugMode = sd.getDebugMode();
+                gameLoop(debugMode);
 	}
 	
 }

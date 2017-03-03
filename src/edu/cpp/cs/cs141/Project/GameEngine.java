@@ -25,7 +25,7 @@ public class GameEngine {
 	/**
 	 * A field that represents the board that the user will be playing on
 	 */
-	private Board bldg;
+	private static Board bldg;
 
 	/**
 	 * A field that represents the number of lives (or tries) that a player has.
@@ -34,8 +34,6 @@ public class GameEngine {
 	private int lives;
 	
 	private boolean foundBriefcase;
-        
-        private boolean debugMode;
 
 	/**
 	 * The default constructor for the class GameEngine. Initially, the game
@@ -45,7 +43,6 @@ public class GameEngine {
 	public GameEngine() {
 		bldg = new Board();
 		lives = 3;
-                debugMode = false;
 	}
 
 	/**
@@ -97,7 +94,7 @@ public class GameEngine {
 	 */
 	public boolean foundInvincibility(){
 		boolean found = false;
-		if (getAgentX()==bldg.getInvcX() && getAgentY()==bldg.getInvcY())
+		if (getAgentX()==bldg.getInvc().getX() && getAgentY()==bldg.getInvc().getY())
 			found = true;
 		return found;
 	}
@@ -110,9 +107,15 @@ public class GameEngine {
 		boolean found = false;
 		if (getAgentX()==bldg.getBulletX() && getAgentY()==bldg.getBulletY())
 			found=true;
+		bldg.getGun().reload();
 		return found;
 	}
 
+	public void useGun(){
+		if (foundBullet() && bldg.getGun().seeAmmo()>0)
+			bldg.getGun().use();
+	}
+	
 	/**
 	 * A method that checks if the agent was able to move up
 	 * @return
@@ -165,12 +168,6 @@ public class GameEngine {
 		return true;
 	}
 	
-	
-	public void useItem(){
-		if (foundBullet() && bldg.getGun().seeAmmo()<1)
-			bldg.getGun().use();
-		
-	}
 	
 	/**
 	 * A method that will check all surrounding units of a ninja assassin. If
@@ -239,14 +236,6 @@ public class GameEngine {
 		return bldg.validRoomCoords(i, j);
 	}
 
-	public int getInvcX() {
-		return bldg.getInvcX();
-	}
-
-	public int getInvcY() {
-		return bldg.getInvcY();
-	}
-
 	public int getBulletX() {
 		return bldg.getBulletX();
 	}
@@ -262,29 +251,16 @@ public class GameEngine {
 	public int getRadarY() {
 		return bldg.getRadarY();
 	}
-
-        public void setDebugMode(boolean debug)
-        {
-            debugMode = debug;
-        }
         
-        public boolean getDebugMode()
-        {
-            return debugMode;
-        }
-        
-        public void loadBoard(Board board)
-        {
+        public void loadBoard(Board board) {
             bldg = board;
         }
         
-        public void loadLives(int lives)
-        {
+        public void loadLives(int lives) {
             this.lives = lives;
         }
         
-        public void loadFoundBriefcase(boolean found)
-        {
+        public void loadFoundBriefcase(boolean found) {
             foundBriefcase = found;
         }
 }

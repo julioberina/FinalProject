@@ -13,11 +13,12 @@
  */
 package edu.cpp.cs.cs141.Project;
 
+import java.io.Serializable;
 /**
  * @author AlternativeFAQs
  *
  */
-public class Room {
+public class Room implements Serializable {
 	private int xPos;
 	private int yPos;
 	private boolean briefcase;

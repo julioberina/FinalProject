@@ -27,38 +27,41 @@ public class SaveData {
         private Board board;
         private int lives;
         private boolean foundBriefcase;
-        private boolean debugMode;
-    
+        private boolean debug;
+        
 	public SaveData() {
 		// TODO Auto-generated constructor stub
                 // default values for fields
                 board = null;
                 lives = 0;
                 foundBriefcase = false;
-                debugMode = false;
 	}
         
         public void save(Board board, int lives, boolean found, boolean debug, String fname) throws IOException
         {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("memorycard/" + fname + ".dat"));
+            ObjectOutputStream oos = new ObjectOutputStream(
+                    new FileOutputStream(System.getProperty("user.dir") + "/memorycard/" + fname + ".dat")
+            );
             this.board = board;
             this.lives = lives;
             foundBriefcase = found;
-            debugMode = debug;
+            this.debug = debug;
             oos.writeObject(this.board);
             oos.writeInt(this.lives);
             oos.writeBoolean(this.foundBriefcase);
-            oos.writeBoolean(this.debugMode);
+            oos.writeBoolean(this.debug);
             oos.close();
         }
         
         public void load(String fname) throws IOException, ClassNotFoundException
         {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream("memorycard/" + fname + ".dat"));
+            ObjectInputStream ois = new ObjectInputStream(
+                    new FileInputStream(System.getProperty("user.dir") + "/memorycard/" + fname + ".dat")
+            );
             this.board = (Board)ois.readObject();
             this.lives = ois.readInt();
             this.foundBriefcase = ois.readBoolean();
-            this.debugMode = ois.readBoolean();
+            this.debug = ois.readBoolean();
             ois.close();
         }
         
@@ -79,6 +82,6 @@ public class SaveData {
         
         public boolean getDebugMode()
         {
-            return debugMode;
+            return debug;
         }
 }

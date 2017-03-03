@@ -14,12 +14,12 @@
 package edu.cpp.cs.cs141.Project;
 
 import java.util.Random;
-
+import java.io.Serializable;
 /**
  * @author AlternativeFAQs
  *
  */
-public class Assassin extends ActiveAgent {
+public class Assassin extends ActiveAgent implements Serializable{
 
     Random random;
     

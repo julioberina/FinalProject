@@ -15,12 +15,13 @@ package edu.cpp.cs.cs141.Project;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * @author AlternativeFAQs
  *
  */
-public class Board {
+public class Board implements Serializable {
 
 	/**
 	 * A field that represents the length and width of the building. It is a set
@@ -47,7 +48,7 @@ public class Board {
 
 	private Agent agent;
 
-	protected Item invc;
+	protected Invincibility invc;
 	protected Item radar;
 	protected Item extraBull;
 	protected Gun gun;
@@ -81,7 +82,7 @@ public class Board {
 					bldg[row][column] = 'A';
 				else if (AssassinCoord(row,column))
 					bldg[row][column] = 'N';
-				else if (row == getInvcX() && column == getInvcY())
+				else if (row == getInvc().getX() && column == getInvc().getY())
 					bldg[row][column] = 'I';
 				else if (row == getBulletX() && column == getBulletY())
 					bldg[row][column] = 'B';
@@ -319,13 +320,13 @@ public class Board {
 	public Gun getGun(){
 		return gun;
 	}
-
-	public int getInvcX() {
-		return invc.getX();
+	
+	public Invincibility getInvc(){
+		return invc;
 	}
-
-	public int getInvcY() {
-		return invc.getY();
+	
+	public Agent getAgent(){
+		return agent;
 	}
 
 	public int getBulletX() {
@@ -343,11 +344,22 @@ public class Board {
 	public int getRadarY() {
 		return radar.getY();
 	}
-	
-	public Agent getAgent(){
-		return agent;
-	}
 
+	public int[] getDocLocation(){
+		int[] location;
+		int row=0, column=0;
+		for (int i = 1 ; i < 8 ; i += 3){
+			for (int j = 1 ; j < 8 ; j+=3 ){
+				if (validBriefcaseCoords(i,j)){
+					row = j;
+					column = i;
+				}
+			}
+		}
+		location = new int[] {row, column};
+		return location;
+	}
+	
 	public String toString(){
 		String type = "";
 		for (int j=8 ; j>=0 ; j--){

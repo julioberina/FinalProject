@@ -17,11 +17,12 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.io.Serializable;
 
+
 /**
  * @author AlternativeFAQs
  *
  */
-public class Board implements Serializable {
+public class Board implements Serializable{
 
 	/**
 	 * A field that represents the length and width of the building. It is a set
@@ -250,7 +251,7 @@ public class Board implements Serializable {
 	 */
 	private int randomGen(int max) {
 		Random rand = new Random();
-		return rand.nextInt(max - 1);
+		return rand.nextInt(max);
 	}
 
 	/**
@@ -270,10 +271,10 @@ public class Board implements Serializable {
 	 * @return A check to see if the input coords match with the assasin coords to out put them
 	 */
 	public boolean AssassinCoord(int x, int y) {
-		Assassin[] spyArray = (Assassin[]) ninjas.toArray(new Assassin[6]);
+//		Assassin[] spyArray = (Assassin[]) ninjas.toArray(new Assassin[ninjas.size()]);
 		boolean valid = false;
-		for (int i = 0; i < 6; ++i) {
-			if (x == spyArray[i].getX() && y == spyArray[i].getY()) {
+		for (int i = 0; i < ninjas.size(); ++i) {
+			if (x == ninjas.get(i).getX() && y == ninjas.get(i).getY()) {
 				valid = true;
 				break;
 			}
@@ -372,32 +373,32 @@ public class Board implements Serializable {
 	}
 	
 	public void ninjaMove() {
-		Assassin[] spyArray = (Assassin[]) ninjas.toArray(new Assassin[6]);
+//		Assassin[] spyArray = (Assassin[]) ninjas.toArray(new Assassin[ninjas.size()]);
 
-		for(int i = 0; i < 6; i++){
+		for(int i = 0; i < ninjas.size() ; i++){
 			int direction = randomGen(4);
-			int xPos = spyArray[i].getX();
-			int yPos = spyArray[i].getY();
+			int xPos = ninjas.get(i).getX();
+			int yPos = ninjas.get(i).getY();
 	        switch(direction){
 	        case 0: 
-	        	if (spyArray[i].canMove('w') && !AssassinCoord(xPos,yPos+1))
+	        	if (ninjas.get(i).canMove('w') && !AssassinCoord(xPos,yPos+1))
 	        		++yPos;
 	        	break;
 	        case 1:
-	        	if (spyArray[i].canMove('d') && !AssassinCoord(xPos+1,yPos))
+	        	if (ninjas.get(i).canMove('d') && !AssassinCoord(xPos+1,yPos))
 	        		++xPos;
 	        	break;
 	        case 2:
-	        	if (spyArray[i].canMove('s') && !AssassinCoord(xPos,yPos-1))
+	        	if (ninjas.get(i).canMove('s') && !AssassinCoord(xPos,yPos-1))
 	        		--yPos;
 	        	break;
 	        case 3:
-	        	if (spyArray[i].canMove('a') && !AssassinCoord(xPos-1,yPos))
+	        	if (ninjas.get(i).canMove('a') && !AssassinCoord(xPos-1,yPos))
 	        		--xPos;
 	        	break;
 			}
-	    	spyArray[i].setX(xPos);
-			spyArray[i].setY(yPos);
+	        ninjas.get(i).setX(xPos);
+	        ninjas.get(i).setY(yPos);
 		}
 		
 	}
@@ -413,4 +414,5 @@ public class Board implements Serializable {
 		space = bldg[i][j];
 		return space;
 	}
+	
 }

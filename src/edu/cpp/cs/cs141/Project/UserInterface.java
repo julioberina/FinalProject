@@ -46,20 +46,20 @@ public class UserInterface {
 		eng = new GameEngine();
 	}
 	
+	public void runGame() throws ClassNotFoundException, IOException {
+		do{
+			eng.reset();
+			displayMenu();
+		} while (replay());
+	}
+	
 	/**
 	 * A method that displays the games overall menu. It will give the user the option to start, save, or load a game, and
 	 * give them the option to see the help screen.
 	 */
 	public void displayMenu() throws IOException, ClassNotFoundException {
-		String choice;
-		
-		System.out.println("Welcome, Agent Smith. We have a new assignment for you.\n "
-				+ "Retrieve the briefcase with classified documents hidden in one of the 9 rooms.\n "
-				+ "You may only see two squares ahead of you, and watch out for ninja assassins.");
-		System.out.print("\nStart New Game - N"
-				+ "\nDebug Mode - D \t\t\tHelp - H"
-				+ "\nLoad Prevous Game - L \t\tQuit - Q (Press at any time)\t");
-		choice = keyboard.nextLine();
+		displayStart();
+		String choice = keyboard.nextLine();
 		
 		if (choice.equalsIgnoreCase("H")){
 			displayHelp();
@@ -80,7 +80,6 @@ public class UserInterface {
 				gameLoop(debugMode);
 			}
 			displayResult();
-
 		}
 		else if (choice.equalsIgnoreCase("Q")){
 			System.out.println("\nGood Bye.");
@@ -88,6 +87,16 @@ public class UserInterface {
 		}
 		else System.out.println("\nInvalid Choice Entered. Mission Aborted.");
 		
+	}
+
+	
+	public void displayStart(){
+		System.out.println("\n\nWelcome, Agent Smith. We have a new assignment for you.\n "
+				+ "Retrieve the briefcase with classified documents hidden in one of the 9 rooms.\n "
+				+ "You may only see two squares ahead of you, and watch out for ninja assassins.");
+		System.out.print("\nStart New Game - N"
+				+ "\nDebug Mode - D \t\t\tHelp - H"
+				+ "\nLoad Prevous Game - L \t\tQuit - Q (Press at any time)\t");
 	}
 	
 	/**
@@ -150,7 +159,7 @@ public class UserInterface {
 		System.out.println();
 		for (int j = 8; j >= 0; --j) {
 			for (int i = 0; i < 9; ++i) {
-				if (i == eng.getAgentX() && j == eng.getAgentY()) 
+				if (i == eng.getAgent().getX() && j == eng.getAgent().getY()) 
 					System.out.print("[A]");
 				else if (eng.validRoomCoords(i, j) || eng.validBriefcaseCoords(i, j)) 
 					System.out.print("[R]");
@@ -180,17 +189,22 @@ public class UserInterface {
         	}
         	else if (debug==true)
         		displayBoardDebug();
+        	
         	agentMove();
         	checkItems();
+        	
             if (eng.briefcaseFound())
             	break;   
+          
+            eng.getBoard().ninjaMove();
             
-            if (eng.foundInvincibility() && eng.getBoard().getInvc().getTurns()>0){
+            if (eng.foundInvincibility() || (eng.getBoard().getInvc().getTurns()>0 && eng.getBoard().getInvc().getTurns()<5)){
+            	System.out.println("\n\nInvincibility found. Good for "
+            			+ eng.getBoard().getInvc().getTurns() + " more turns.");
             	eng.getBoard().getInvc().use();
             	break;
             }
             
-            eng.getBoard().ninjaMove();
             if (eng.checkForKill()){
             	eng.loseLife();
             	System.out.println("\n\nA ninja killed you!\n\n");
@@ -231,25 +245,27 @@ public class UserInterface {
 	public void agentMove() throws IOException {
 		switch (getDirection()){
         case UP:{
-        	if (eng.movedUp())
-        		eng.useGun();
-        	else System.out.println("Unable to move.");
-        	break;}
+        	if (!eng.movedUp())
+        		System.out.println("Unable to move.");
+/*    		if (eng.getAgent().move('w'))
+    			eng.getAgent().setY(eng.getAgentY()+1);
+    		else System.out.println("Unable to move.");
+*/        	break;}
         case DOWN:{
         	if (eng.checkRoom())
         		break;
-        	if (eng.movedDown())
-        		eng.useGun();
+    		if (eng.getAgent().move('s')) 
+    			eng.getAgent().setY(eng.getAgentY()-1);
         	else System.out.println("Unable to move.");
         	break;}
         case LEFT:{
-        	if (eng.movedLeft())
-        		eng.useGun();
+    		if (eng.getAgent().move('a'))
+    			eng.getAgent().setX(eng.getAgentX()-1);
         	else System.out.println("Unable to move.");           	
         	break;}
         case RIGHT:{
-        	if (eng.movedRight())
-        		eng.useGun();
+    		if (eng.getAgent().move('d'))
+    			eng.getAgent().setX(eng.getAgentX()+1);
         	else System.out.println("Unable to move.");
         	break;}
         }
@@ -264,7 +280,8 @@ public class UserInterface {
 		DIRECTION dir = null;
         boolean choiceMade = false;
 		while (choiceMade == false) {
-    		System.out.print("\nChoose direction to move (W-Up, A-Left, S-Down, D-Right): \t");
+    		System.out.print("\nChoose direction to move (W-Up, A-Left, S-Down, D-Right)"
+    				+ "\nOR Shoot - P, Save - M, Quit - Q: \t\t\t\t");
     		choice = keyboard.nextLine();
     		if (choice.equalsIgnoreCase("w") && eng.getAgentY() < 8) {
     			dir = DIRECTION.UP;
@@ -282,9 +299,16 @@ public class UserInterface {
     			dir = DIRECTION.RIGHT;
                	choiceMade = true;
                 }
+    		else if (choice.equalsIgnoreCase("p")){
+    			shoot();
+    			if (debugMode)
+    				displayBoardDebug();
+    			if (!debugMode)
+    				displayBoard();
+    		}
     		else if (choice.equalsIgnoreCase("q"))
     			System.exit(0);
-                else if (choice.equalsIgnoreCase("m"))
+    		else if (choice.equalsIgnoreCase("m"))
                         saveGame();
                     
     		else System.out.println("Not a valid move. Try again.");
@@ -357,15 +381,39 @@ public class UserInterface {
 	
 	public void displayResult(){
 		if (eng.getLives()==0)
-			System.out.println("\n\nMission Failed");
+			System.out.println("\n\nMission Failed.\n");
 		else if (eng.briefcaseFound())
-			System.out.println("\n\nMission Accomplished.");
+			System.out.println("\n\nMission Accomplished.\n");
+	}
+	
+	public void shoot(){
+		String choice="";
+		DIRECTION dir = null;
+		if (eng.getBoard().getGun().seeAmmo()<1)
+			System.out.println("\nCan't Shoot! Out of Ammo!");
+		while (eng.getBoard().getGun().seeAmmo() ==1 ){
+    		System.out.print("\nChoose direction to shoot (W-Up, A-Left, S-Down, D-Right): \t");
+    		choice = keyboard.nextLine();
+    		if (choice.equalsIgnoreCase("w"))
+    			eng.useGun('w');
+    		else if (choice.equalsIgnoreCase("a")) 
+    			eng.useGun('a');
+    		else if (choice.equalsIgnoreCase("s")) 
+    			eng.useGun('s');
+			else if (choice.equalsIgnoreCase("d"))
+				eng.useGun('d');
+    		else if (choice.equalsIgnoreCase("q"))
+    			System.exit(0);
+    		else System.out.println("Not a valid move. Try again.");
+		}
+		eng.getBoard().getGun().use();
+		
 	}
 
 	public boolean replay(){
 		boolean replay = true;
 		String again;
-		System.out.print("Would you like to play Again? (Y/N);\t\t");
+		System.out.print("Would you like to play Again? (Y/N);\t\t\t\t");
 		again = keyboard.nextLine();
 		if (again.equalsIgnoreCase("N"))
 			replay = false;
@@ -404,11 +452,11 @@ public class UserInterface {
 	public void loadGame() throws IOException, ClassNotFoundException {
                 File saveFolder = new File("memorycard/");
                 File[] saveFiles = saveFolder.listFiles();
-		String filename = "";
+		        String filename = "";
                 SaveData sd = new SaveData();                
                 
                 
-                System.out.println("Here is a list of save files: ");
+                System.out.println("Here is a list of save files: \n");
                 for (int i = 0; i < saveFiles.length; ++i)
                     System.out.println(saveFiles[i]);
                 
@@ -421,7 +469,7 @@ public class UserInterface {
                 
 		//Call method from SaveData
                 sd.load(filename);
-		eng.loadBoard(sd.getBoard());
+		        eng.loadBoard(sd.getBoard());
                 eng.loadLives(sd.getLives());
                 eng.loadFoundBriefcase(sd.getFoundBriefcase());
                 debugMode = sd.getDebugMode();

@@ -43,21 +43,7 @@ public class GameEngine {
 	public GameEngine() {
 		bldg = new Board();
 		lives = 3;
-	}
-
-	/**
-	 * An overloaded constructor that will create a game engine based off of old
-	 * statistics from a game that the user previously saved.
-	 * 
-	 * @param oldGame
-	 *            - The previous board from the saved game that the user wants
-	 *            to load
-	 * @param prevLives
-	 *            - The previous amount of lives that the user had in the saved
-	 *            game
-	 */
-	public GameEngine(Board oldGame, int prevLives) {
-
+		foundBriefcase = false;
 	}
 
 	/**
@@ -111,9 +97,40 @@ public class GameEngine {
 		return found;
 	}
 
-	public void useGun(){
-		if (foundBullet() && bldg.getGun().seeAmmo()>0)
+	public void useGun(char direction){
+		if (bldg.getGun().seeAmmo()>0)
 			bldg.getGun().use();
+		ArrayList<Assassin> ninjaList = bldg.getNinjas();
+		switch (direction){
+		case 'w':
+			for (int i = 0 ; i < ninjaList.size() ; i++){
+				if (ninjaList.get(i).getX()==bldg.getAgent().getX() && 
+						ninjaList.get(i).getY() >= bldg.getAgent().getY())
+					ninjaList.remove(i);
+			}
+			break;
+		case 'a':
+			for (int i = 0 ; i < ninjaList.size() ; i++){
+				if (ninjaList.get(i).getY()==bldg.getAgent().getY() && 
+						ninjaList.get(i).getX() <= bldg.getAgent().getX())
+					ninjaList.remove(i);
+			}
+			break;
+		case 's':
+			for (int i = 0 ; i < ninjaList.size() ; i++){
+				if (ninjaList.get(i).getX()==bldg.getAgent().getX() && 
+						ninjaList.get(i).getY() <= bldg.getAgent().getY())
+					ninjaList.remove(i);
+			}
+			break;
+		case 'd':
+			for (int i = 0 ; i < ninjaList.size() ; i++){
+				if (ninjaList.get(i).getY()==bldg.getAgent().getY() && 
+						ninjaList.get(i).getX() >= bldg.getAgent().getX())
+					ninjaList.remove(i);
+			}
+			break;
+		}
 	}
 	
 	/**
@@ -177,7 +194,7 @@ public class GameEngine {
 	public boolean checkForKill() {
 		ArrayList<Assassin> hitList = bldg.getNinjas();
 		boolean nextToAgent = false;
-		for (int i = 0 ; i<6 ; i++){
+		for (int i = 0 ; i<bldg.getNinjas().size() ; i++){
 			if (getAgentX()==hitList.get(i).getX() && (getAgentY()==hitList.get(i).getY()+1 || getAgentY()==hitList.get(i).getY()-1))
 				nextToAgent=true;
 			if (getAgentY()==hitList.get(i).getY() && (getAgentX()==hitList.get(i).getX()+1 || getAgentX()==hitList.get(i).getX()-1))
@@ -251,16 +268,23 @@ public class GameEngine {
 	public int getRadarY() {
 		return bldg.getRadarY();
 	}
-        
-        public void loadBoard(Board board) {
-            bldg = board;
-        }
-        
-        public void loadLives(int lives) {
-            this.lives = lives;
-        }
-        
-        public void loadFoundBriefcase(boolean found) {
-            foundBriefcase = found;
-        }
+	
+    public void loadBoard(Board board) {
+        bldg = board;
+    }
+    
+    public void loadLives(int lives) {
+        this.lives = lives;
+    }
+    
+    public void loadFoundBriefcase(boolean found) {
+        foundBriefcase = found;
+    }
+    
+	public void reset(){
+		bldg = new Board();
+		lives = 3;
+		foundBriefcase = false;
+	}
+
 }

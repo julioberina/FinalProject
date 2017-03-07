@@ -15,6 +15,8 @@ package edu.cpp.cs.cs141.Project;
 
 import java.util.Random;
 import java.io.Serializable;
+
+
 /**
  * @author AlternativeFAQs
  *
@@ -63,7 +65,7 @@ public class Assassin extends ActiveAgent implements Serializable{
 				canMove = false;
 			else if ((yPos == 1 && (xPos - 1 == 1 || xPos - 1 == 4 || xPos - 1 == 7))
 					|| (yPos == 4 && (xPos - 1 == 1 || xPos - 1 == 4 || xPos - 1 == 7))
-					|| (yPos == 7 && (xPos - 1 == 1 || xPos - 1 == 4 || xPos + 1 == 7)) ) {
+					|| (yPos == 7 && (xPos - 1 == 1 || xPos - 1 == 4 || xPos - 1 == 7)) ) {
 				canMove = false;
 			}
 		}
@@ -86,7 +88,7 @@ public class Assassin extends ActiveAgent implements Serializable{
         	break;
         case 1:
         	if (canMove('a'))
-        		xPos=xPos+1;
+        		xPos=xPos-1;
         	break;
         case 2:
         	if (canMove('s'))
@@ -94,7 +96,7 @@ public class Assassin extends ActiveAgent implements Serializable{
         	break;
         case 3:
         	if (canMove('d'))
-        		xPos=xPos-1;
+        		xPos=xPos+1;
         	break;
 		}
 		super.setX(xPos);

@@ -25,9 +25,7 @@ public class Main {
 	 */
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		UserInterface ui = new UserInterface();
-		do{
-			ui.displayMenu();
-		}while (ui.replay());
+		ui.runGame();
 	}
 
 }

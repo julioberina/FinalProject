@@ -91,15 +91,15 @@ public class GameEngine {
 	 */
 	public boolean foundBullet(){
 		boolean found = false;
-		if (getAgentX()==bldg.getBulletX() && getAgentY()==bldg.getBulletY())
-			found=true;
-		bldg.getGun().reload();
+		if (getAgentX()==bldg.getBulletX() && getAgentY()==bldg.getBulletY()) { // needed curly braces
+                    found=true;
+                    bldg.getGun().reload(); // called outside of if statement
+                }
 		return found;
 	}
 
 	public void useGun(char direction){
-		if (bldg.getGun().seeAmmo()>0)
-			bldg.getGun().use();
+                bldg.getGun().use();
 		ArrayList<Assassin> ninjaList = bldg.getNinjas();
 		switch (direction){
 		case 'w':

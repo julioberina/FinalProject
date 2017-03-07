@@ -391,7 +391,9 @@ public class UserInterface {
 		DIRECTION dir = null;
 		if (eng.getBoard().getGun().seeAmmo()<1)
 			System.out.println("\nCan't Shoot! Out of Ammo!");
-		while (eng.getBoard().getGun().seeAmmo() ==1 ){
+                else
+		//while (eng.getBoard().getGun().seeAmmo() ==1 )
+                {
     		System.out.print("\nChoose direction to shoot (W-Up, A-Left, S-Down, D-Right): \t");
     		choice = keyboard.nextLine();
     		if (choice.equalsIgnoreCase("w"))
@@ -400,14 +402,12 @@ public class UserInterface {
     			eng.useGun('a');
     		else if (choice.equalsIgnoreCase("s")) 
     			eng.useGun('s');
-			else if (choice.equalsIgnoreCase("d"))
-				eng.useGun('d');
+		else if (choice.equalsIgnoreCase("d"))
+			eng.useGun('d');
     		else if (choice.equalsIgnoreCase("q"))
     			System.exit(0);
     		else System.out.println("Not a valid move. Try again.");
 		}
-		eng.getBoard().getGun().use();
-		
 	}
 
 	public boolean replay(){

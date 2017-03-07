@@ -159,7 +159,7 @@ public class UserInterface {
 		System.out.println();
 		for (int j = 8; j >= 0; --j) {
 			for (int i = 0; i < 9; ++i) {
-				if (i == eng.getAgent().getX() && j == eng.getAgent().getY()) 
+				if (i == eng.getAgentX() && j == eng.getAgentY()) 
 					System.out.print("[A]");
 				else if (eng.validRoomCoords(i, j) || eng.validBriefcaseCoords(i, j)) 
 					System.out.print("[R]");
@@ -456,7 +456,7 @@ public class UserInterface {
                 SaveData sd = new SaveData();                
                 
                 
-                System.out.println("Here is a list of save files: \n");
+                System.out.println("Here is a list of save files: ");
                 for (int i = 0; i < saveFiles.length; ++i)
                     System.out.println(saveFiles[i]);
                 

@@ -117,6 +117,10 @@ public class UserInterface {
 			}
 			System.out.println("\t\t" + legend[j]);
 		}
+                
+                System.out.print("\n\n");
+                System.out.print("Lives: " + eng.getLives() + "\t");
+                System.out.println("Bullets: " + eng.getBoard().getGun().seeAmmo());
 	}
 	
 	
@@ -147,6 +151,10 @@ public class UserInterface {
 			}
 			System.out.println("\t\t" + legend[j]);
 		}
+                
+                System.out.print("\n\n");
+                System.out.print("Lives: " + eng.getLives() + "\t");
+                System.out.println("Bullets: " + eng.getBoard().getGun().seeAmmo());
 	}
 	
 	/**

@@ -80,7 +80,7 @@ public class Board implements Serializable{
 		for (int row=8; row >= 0 ; row-- ){
 			for (int column = 0; column < size; column++){					
 				if (row == agent.getX() && column == agent.getY())
-					bldg[row][column] = 'A';
+					bldg[row][column] = ' ';
 				else if (AssassinCoord(row,column))
 					bldg[row][column] = 'N';
 				else if (row == getInvc().getX() && column == getInvc().getY())
